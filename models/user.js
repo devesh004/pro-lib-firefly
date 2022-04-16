@@ -21,7 +21,10 @@ const UserSchema = new mongoose.Schema(
     },
     college: {
       type: String,
-      required: [true, "Add your college name"],
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
     },
     github: {
       type: String,

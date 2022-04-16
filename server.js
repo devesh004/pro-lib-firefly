@@ -36,5 +36,5 @@ app.use("/api/project", projectRoutes);
 app.use(errorhandler);
 
 app.listen(process.env.PORT || 5000, () => {
-  console.log("listing port 5000");
+  console.log("listening port 5000");
 });

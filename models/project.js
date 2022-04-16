@@ -37,7 +37,7 @@ const ProjectSchema = new mongoose.Schema(
           "Smart Automation",
           "Smart Vehicles",
           "Travel and Tourism",
-          "Transportation & Logistics",
+          "Transportation and Logistics",
           "Disaster Management",
           "Smart Education",
           "Image Processing",
@@ -51,6 +51,10 @@ const ProjectSchema = new mongoose.Schema(
     isCompleted: {
       type: Boolean,
       default: false,
+    },
+    desc: {
+      type: String,
+      maxlength: 500,
     },
     status: {
       type: String,

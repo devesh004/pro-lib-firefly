@@ -34,17 +34,53 @@ router.get(
     //sorts with stars
     //sorts with forks
     let pr = await Project.find(qs);
-    pr.forEach(async (project) => {
+    let projects = [];
+    let ans;
+    pr.forEach(async (project, ind) => {
+      let gitData;
       if (project.githubRepo) {
-        const repo = project.githubRepo?.substr(19);
+        const repo = project.githubRepo.substr(19);
         const finalRepo = "https://api.github.com/repos/" + repo;
-        // console.log(finalRepo);
-        const res = project.githubRepo && (await axios.get(finalRepo));
-        console.log(res.data.forks);
-        // pr.forks=res.da
+        const result = await axios.get(finalRepo);
+        // console.log(result.data);
+        gitData = {
+          forks: result.data.forks,
+          issues: result.data.open_issues,
+          stars: result.data.stargazers_count,
+        };
+
+        // project.forks = result.data.forks;
+        // project.issues = result.data.open_issues;
+        // project.stars = result.data.stargazers_count;
+        // console.log(project);
+      }
+      const pro = { ...project, gitData };
+      projects.push({ ...pro._doc, ...gitData });
+      // console.log(pro._doc);
+      if (ind === pr.length - 1) {
+        res.status(200).json(projects);
       }
     });
-    res.status(200).json(pr);
+  })
+);
+
+router.put(
+  "/edit/:id",
+  wrapAsync(async (req, res, next) => {
+    const { id } = req.params;
+    const project = await Project.findByIdAndUpdate(id, req.body);
+    res.status(200).json(project);
+  })
+);
+
+router.post(
+  "/hashTag/:id",
+  wrapAsync(async (req, res, next) => {
+    const { id } = req.params;
+    const { hashTag } = req.body;
+    let project = await Project.findById(id);
+    project.hashTag.push(hashTag);
+    res.status(200).json(project);
   })
 );
 
