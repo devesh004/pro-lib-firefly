@@ -4,6 +4,7 @@ import { Button, Col, Container, Row } from "react-bootstrap";
 import { colleges } from "../utils/CollgeNameList";
 import { domains } from "../utils/Arrays";
 import { FloatingLabel, Form } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const AllProjects = () => {
   const [projects, setProjects] = useState([]);
@@ -108,10 +109,31 @@ const AllProjects = () => {
       <Button variant="success" onClick={filterProjects}>
         Apply
       </Button>
-      {/* {projects}
-      <Row>
-          <div></div>
-      </Row> */}
+      {projects.map((pro) => (
+        <>
+          <Row className="shadow" style={{ height: "40px", margin: "3px" }}>
+            <Link to={`/project/${pro._id}`}>
+              <span>{pro.name}</span>
+            </Link>
+          </Row>
+          <Row
+            className="shadow d-flex"
+            style={{ height: "40px", margin: "3px" }}
+          >
+            <Link to={`/project/${pro._id}`}>
+              <span>{pro.name}</span>
+            </Link>
+          </Row>
+          <Row
+            className="shadow d-flex"
+            style={{ height: "40px", margin: "3px" }}
+          >
+            <Link to={`/project/${pro._id}`}>
+              <span>{pro.name}</span>
+            </Link>
+          </Row>
+        </>
+      ))}
     </Container>
   );
 };
