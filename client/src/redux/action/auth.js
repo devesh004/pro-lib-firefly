@@ -1,4 +1,5 @@
 import {
+  LOAD_USER,
   LOGIN_ERR,
   LOGIN_REQ,
   LOGIN_SUCC,
@@ -11,6 +12,53 @@ import {
 } from "./types";
 
 import axios from "axios";
+
+export const loadUser = () => async (dispatch, getState) => {
+  try {
+    let token;
+    if (getState().auth && getState().auth.accessToken) {
+      token = getState().auth.accessToken;
+    }
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.get("/api/auth/me", config);
+    dispatch({
+      type: LOAD_USER,
+      payload: data,
+    });
+
+    localStorage.setItem("pf-user", JSON.stringify(data));
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const verifyUser = (fn) => async (dispatch, getState) => {
+  try {
+    let token;
+    if (getState().auth && getState().auth.accessToken) {
+      token = getState().auth.accessToken;
+    }
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    await axios.post("/api/auth/verified", {}, config);
+    // dispatch({
+    //   type: LOAD_USER,
+    // });
+    fn();
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const loginUser = (email, password) => async (dispatch) => {
   try {
@@ -35,7 +83,8 @@ export const loginUser = (email, password) => async (dispatch) => {
       payload: data,
     });
 
-    localStorage.setItem("pf-user", JSON.stringify(data));
+    localStorage.setItem("pf-user", JSON.stringify(data.user));
+    localStorage.setItem("pf-token", JSON.stringify(data.accessToken));
   } catch (err) {
     dispatch({
       type: LOGIN_ERR,
@@ -86,7 +135,8 @@ export const registerUser =
         payload: data,
       });
 
-      localStorage.setItem("pf-user", JSON.stringify(data));
+      localStorage.setItem("pf-user", JSON.stringify(data.user));
+      localStorage.setItem("pf-token", JSON.stringify(data.accessToken));
     } catch (err) {
       dispatch({
         type: REGISTER_ERR,

@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const ErrorResponse = require("../utils/errorResponse");
 const { sendMail } = require("../utils/sendMail");
+const { protect } = require("../middlewares/auth");
 
 router.post(
   "/signUp",
@@ -33,7 +34,7 @@ router.post(
       process.env.JWT_SECRET,
       { expiresIn: "2d" }
     );
-    res.status(200).json({ ...others, accessToken });
+    res.status(200).json({ user: others, accessToken });
   })
 );
 
@@ -47,7 +48,6 @@ router.post(
     if (!user) {
       return next(new ErrorResponse("User not found", 404));
     }
-    console.log(password, user.password);
     bcrypt.compare(password, user.password, function (err, correct) {
       if (err) {
         return next(new ErrorResponse("Internal Server Error", 500));
@@ -62,9 +62,11 @@ router.post(
             expiresIn: "2d",
           }
         );
-        console.log("login");
         const { password, ...others } = user._doc;
-        res.status(200).json({ ...others, accessToken });
+        console.log({ user: others, accessToken });
+        res.status(200).json({ user: others, accessToken });
+      } else {
+        return next(new ErrorResponse("Invalid credentials", 400));
       }
     });
   })
@@ -85,6 +87,37 @@ router.post(
       console.log(err);
       return next(new ErrorResponse("Email not sent", 500));
     }
+  })
+);
+
+router.post(
+  "/verified",
+  protect,
+  wrapAsync(async (req, res, next) => {
+    await User.findByIdAndUpdate(req.user._id, { isVerified: true });
+    res.status(201).json({ msg: "User verified" });
+  })
+);
+
+router.get(
+  "/me",
+  protect,
+  wrapAsync(async (req, res, next) => {
+    let user = await User.findById(req.user._id).select("-password");
+    if (!user) {
+      return next(new ErrorResponse("User not found", 404));
+    }
+    // console.log(user);
+    res.status(200).json(user);
+  })
+);
+
+router.post(
+  "/verified",
+  protect,
+  wrapAsync(async (req, res, next) => {
+    await User.findByIdAndUpdate(req.user._id, { isVerified: true });
+    res.status(201).json({ msg: "User verified" });
   })
 );
 module.exports = router;
