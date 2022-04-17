@@ -21,39 +21,42 @@ const AllProjects = () => {
       setProjects(data);
     };
     fetchProjects();
-  });
+  }, [projects]);
 
   const handleFilters = (e) => {
     setFilters((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
   };
+
   const filterProjects = async () => {
     const options = {
       headers: {
         "Content-Type": "application/json",
       },
     };
+    // console.log(filters);
     const { data } = await axios.get(
-      `/api/project?college=${filters.college}&domains=${filters.domain}&hashTags=${filters.hashTags}&sort=${filters.sort}`,
+      `/api/project?college=${filters.college}&domains=${filters.domain}&sort=${filters.sort}`,
       options
     );
     console.log(data);
-    //   setProjects(data);
+    setProjects(data);
   };
-
+  //   console.log(projects);
   return (
     <Container>
-      <Row className='py-3'>
+      <Row className="py-3">
         <Col md={7}>
           <FloatingLabel
-            className='mb-2'
-            label='Select college'
-            controlId='college'
+            className="mb-2"
+            label="Select college"
+            controlId="college"
           >
             <Form.Select
               onChange={(e) => handleFilters(e)}
-              aria-label='college'
+              aria-label="college"
+              name="college"
             >
               <option>Open this select menu</option>
               {colleges.map((el, index) => (
@@ -66,11 +69,15 @@ const AllProjects = () => {
         </Col>
         <Col md={5}>
           <FloatingLabel
-            className='mb-2'
-            label='Select domain'
-            controlId='domain'
+            className="mb-2"
+            label="Select domain"
+            controlId="domain"
           >
-            <Form.Select onChange={(e) => handleFilters(e)} aria-label='domain'>
+            <Form.Select
+              onChange={(e) => handleFilters(e)}
+              aria-label="domain"
+              name="domain"
+            >
               {domains.map((el, index) => (
                 <option key={index} value={el}>
                   {el}
@@ -80,15 +87,15 @@ const AllProjects = () => {
           </FloatingLabel>
         </Col>
       </Row>
-      <Row className='py-3 justify-content-center'>
+      <Row className="py-3 justify-content-center">
         <Col md={4} style={{ width: "100%" }}>
-          <span className='m-2'>Hash Tag</span>
+          <span className="m-2">Hash Tag</span>
         </Col>
         <Col md={4}>
-          <span className='m-2'>Sort</span>
+          <span className="m-2">Sort</span>
           <select
-            name='sort'
-            className='p-1'
+            name="sort"
+            className="p-1"
             onChange={(e) => handleFilters(e)}
           >
             <option value={""}>Select</option>
@@ -98,9 +105,13 @@ const AllProjects = () => {
           </select>
         </Col>
       </Row>
-      <Button variant='success' onClick={filterProjects}>
+      <Button variant="success" onClick={filterProjects}>
         Apply
       </Button>
+      {/* {projects}
+      <Row>
+          <div></div>
+      </Row> */}
     </Container>
   );
 };

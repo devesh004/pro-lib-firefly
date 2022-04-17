@@ -34,9 +34,9 @@ router.get(
     if (req.query.domains) {
       qs.domain = { $in: req.query.domains };
     }
-    if (req.query.hashTags !== undefined) {
-      qs.hashTag = { $in: req.query.hashTags };
-    }
+    // if (req.query.hashTags !== undefined) {
+    //   qs.hashTag = { $in: req.query.hashTags };
+    // }
     const sortAs = req.query.sort;
     console.log(qs);
     let pr = await Project.find(qs);
