@@ -6,10 +6,14 @@ import rootReudcer from "../redux/reducers";
 const userFromLocal = localStorage.getItem("pf-user")
   ? JSON.parse(localStorage.getItem("pf-user"))
   : null;
+const tokenFromLocal = localStorage.getItem("pf-token")
+  ? JSON.parse(localStorage.getItem("pf-token"))
+  : null;
 
 const initialState = {
   auth: {
     user: userFromLocal,
+    accessToken: tokenFromLocal,
   },
 };
 

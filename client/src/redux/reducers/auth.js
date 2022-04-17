@@ -1,4 +1,5 @@
 import {
+  LOAD_USER,
   LOGIN_ERR,
   LOGIN_REQ,
   LOGIN_SUCC,
@@ -22,13 +23,19 @@ export const authReducer = (state = inititalState, action) => {
     case LOGIN_SUCC:
       return {
         loading: false,
-        user: payload,
+        user: payload.user,
+        accessToken: payload.accessToken,
       };
     case REGISTER_ERR:
     case LOGIN_ERR:
       return {
         loading: false,
         error: payload,
+      };
+    case LOAD_USER:
+      return {
+        ...state,
+        user: payload,
       };
     case LOGOUT_SUCC:
       return {
