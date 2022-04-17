@@ -10,15 +10,16 @@ import {
 } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
+import { userLogout } from "../../redux/action/auth";
 // import { userLogout } from "../../Redux/actions/auth";
 
 const Header = () => {
-  //   const dispatch = useDispatch();
-  //   const { loading, user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const { loading, user } = useSelector((state) => state.auth);
 
   const logoutHandler = () => {
     console.log("sdr");
-    // dispatch(userLogout());
+    dispatch(userLogout());
   };
 
   const guestItems = (
@@ -26,7 +27,7 @@ const Header = () => {
       <LinkContainer to='/login'>
         <Nav.Link>Sign in</Nav.Link>
       </LinkContainer>
-      <LinkContainer to='/register'>
+      <LinkContainer to='/signup'>
         <Nav.Link>
           Sign up <i className='fas fa-user-plus'></i>
         </Nav.Link>
@@ -36,10 +37,13 @@ const Header = () => {
 
   const authItems = (
     <>
+      <LinkContainer to='/new-project'>
+        <Nav.Link>Add new</Nav.Link>
+      </LinkContainer>
       <NavDropdown
         title={
           <>
-            {/* {user && user.name + " "} */}
+            {user && user.name + " "}
             <i className='fas fa-user'></i>
           </>
         }
@@ -81,15 +85,15 @@ const Header = () => {
 
   return (
     <Navbar
-      className='bg-nav shadow-lg mb-5'
-      variant='dark'
+      className='bg-light shadow-lg mb-5'
+      variant='light'
       expand='lg'
       collapseOnSelect
     >
       <Container>
         <LinkContainer to='/'>
           <Navbar.Brand>
-            <i className='fas fa-shopping-basket'></i> Shopzone
+            <i className='fas fa-shopping-basket'></i> ProLIB
           </Navbar.Brand>
         </LinkContainer>
         <Navbar.Toggle aria-controls='navbarScroll' />
@@ -99,14 +103,9 @@ const Header = () => {
             style={{ maxHeight: "100px" }}
             navbarScroll
           >
-            <LinkContainer to='/cart'>
-              <Nav.Link>
-                <i className='fas fa-shopping-cart'></i> Cart
-              </Nav.Link>
-            </LinkContainer>
-            {guestItems}
-            {/* {user && authItems} */}
-            {/* {!user && guestItems} */}
+            {/* {guestItems} */}
+            {user && authItems}
+            {!user && guestItems}
             {/* {user && user.isAdmin && adminItems} */}
           </Nav>
         </Navbar.Collapse>

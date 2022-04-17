@@ -36,6 +36,8 @@ export const loadUser = () => async (dispatch, getState) => {
   }
 };
 
+export const logoutUser = () => async (dispatch) => {};
+
 export const verifyUser = (fn) => async (dispatch, getState) => {
   try {
     let token;
@@ -103,6 +105,7 @@ export const loginUser = (email, password) => async (dispatch) => {
 
 export const userLogout = () => async (dispatch) => {
   localStorage.removeItem("pf-user");
+  localStorage.removeItem("pf-token");
   dispatch({
     type: LOGOUT_SUCC,
   });
