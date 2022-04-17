@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { colleges } from "../utils/CollgeNameList";
-import { domains } from "../utils/Domains";
+import { domains } from "../utils/Arrays";
+import { FloatingLabel, Form } from "react-bootstrap";
+
 const AllProjects = () => {
   const [projects, setProjects] = useState([]);
   const [filters, setFilters] = useState({});
@@ -42,55 +44,51 @@ const AllProjects = () => {
 
   return (
     <Container>
-      <Row className="py-3">
-        <Col md={8}>
-          <span className="m-2">College</span>
-          <select
-            name="college"
-            className="p-1"
-            onChange={(e) => handleFilters(e)}
+      <Row className='py-3'>
+        <Col md={7}>
+          <FloatingLabel
+            className='mb-2'
+            label='Select college'
+            controlId='college'
           >
-            <option value={""}>Select</option>
-            {colleges.map((col) => (
-              <option value={col}>{col}</option>
-            ))}
-            <option>others</option>
-          </select>
+            <Form.Select
+              onChange={(e) => handleFilters(e)}
+              aria-label='college'
+            >
+              <option>Open this select menu</option>
+              {colleges.map((el, index) => (
+                <option key={index} value={el}>
+                  {el}
+                </option>
+              ))}
+            </Form.Select>
+          </FloatingLabel>
         </Col>
-        <Col md={4}>
-          <span className="m-2">Select Domain</span>
-          <select
-            name="domain"
-            className="p-1"
-            onChange={(e) => handleFilters(e)}
+        <Col md={5}>
+          <FloatingLabel
+            className='mb-2'
+            label='Select domain'
+            controlId='domain'
           >
-            <option value={""}>Select</option>
-            {domains.map((dom) => (
-              <option key={dom} value={dom}>
-                {dom}
-              </option>
-            ))}
-            <option>others</option>
-          </select>
+            <Form.Select onChange={(e) => handleFilters(e)} aria-label='domain'>
+              {domains.map((el, index) => (
+                <option key={index} value={el}>
+                  {el}
+                </option>
+              ))}
+            </Form.Select>
+          </FloatingLabel>
         </Col>
       </Row>
-      <Row className="py-2">
-        <Col md={4}>
-          <span className="m-2">Hash Tag</span>
-          <select
-            name="hashTags"
-            className="p-1"
-            onChange={(e) => handleFilters(e)}
-          >
-            <option value={""}>Select</option>
-            <option>others</option>
-          </select>
+      <Row className='py-3 justify-content-center'>
+        <Col md={4} style={{ width: "100%" }}>
+          <span className='m-2'>Hash Tag</span>
         </Col>
         <Col md={4}>
-          <span className="m-2">Sort</span>
+          <span className='m-2'>Sort</span>
           <select
-            name="sort"
-            className="p-1"
+            name='sort'
+            className='p-1'
             onChange={(e) => handleFilters(e)}
           >
             <option value={""}>Select</option>
@@ -100,7 +98,7 @@ const AllProjects = () => {
           </select>
         </Col>
       </Row>
-      <Button variant="success" onClick={filterProjects}>
+      <Button variant='success' onClick={filterProjects}>
         Apply
       </Button>
     </Container>
