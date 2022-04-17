@@ -8,6 +8,8 @@ import Header from "./components/Layout/Header";
 import SignupScreen from "./Screens/SignupScreen";
 import Privateroute from "./components/Routes/Privateroute";
 import AddProjectScreen from "./Screens/AddProjectScreen";
+import Home from "./Screens/Home";
+import AllProjects from "./Screens/AllProjects";
 
 function App() {
   return (
@@ -16,10 +18,12 @@ function App() {
       <Container>
         <main>
           <Routes>
-            <Route path='/login' element={<LoginScreen />} />
-            <Route path='/signup' element={<SignupScreen />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/allProjects" element={<AllProjects />} />
+            <Route path="/login" element={<LoginScreen />} />
+            <Route path="/signup" element={<SignupScreen />} />
             <Route
-              path='/new-project'
+              path="/new-project"
               element={<Privateroute component={<AddProjectScreen />} />}
             />
           </Routes>

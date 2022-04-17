@@ -16,6 +16,14 @@ router.post(
 );
 
 router.get(
+  "/allProjects",
+  wrapAsync(async (req, res, next) => {
+    const projects = await Project.find();
+    res.status(200).json(projects);
+  })
+);
+
+router.get(
   "/",
   wrapAsync(async (req, res, next) => {
     console.log(req.query);
@@ -23,16 +31,14 @@ router.get(
     if (req.query.college) {
       qs.college = req.query.college;
     }
-    if (req.query.domain) {
+    if (req.query.domains) {
       qs.domain = { $in: req.query.domains };
     }
     if (req.query.hashTags) {
       qs.hashTag = { $in: req.query.hashTags };
     }
     const sortAs = req.query.sort;
-    //sorts with con number
-    //sorts with stars
-    //sorts with forks
+    console.log(qs);
     let pr = await Project.find(qs);
     let projects = [];
     let ans;
@@ -61,6 +67,23 @@ router.get(
         res.status(200).json(projects);
       }
     });
+  })
+);
+
+router.get(
+  "/:id",
+  wrapAsync(async (req, res, next) => {
+    const { id } = req.params;
+    const project = await Project.findById(id);
+    const repo = project.githubRepo.substr(19);
+    const finalRepo = "https://api.github.com/repos/" + repo;
+    const result = await axios.get(finalRepo);
+    const contributorsURL = result.data.contributors_url;
+    const desc = result.data.description;
+    const con = await axios.get(contributorsURL);
+    const contributors = con.data.length;
+    const obj = { desc, contributors };
+    res.status(200).json(obj);
   })
 );
 
