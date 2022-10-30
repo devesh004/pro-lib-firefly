@@ -107,4 +107,14 @@ router.post(
   })
 );
 
+router.post(
+  "/logo/imgUrl",
+  wrapAsync(async (req, res, next) => {
+    const { id } = req.params;
+    const { img } = req.body;
+    const name = await Project.findById(id);
+    res.status(200).json(name);
+  })
+);
+
 module.exports = router;
