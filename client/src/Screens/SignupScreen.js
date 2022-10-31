@@ -63,14 +63,14 @@ const SignupScreen = () => {
     name: "",
     email: "",
     password: "",
-    confPass: "",
+    confirmPass: "",
     college: "",
     github: "",
     linkedIn: "",
   });
   const [touched, setTouched] = useState(false);
 
-  const { name, email, password, confPass, college, github, linkedIn } =
+  const { name, email, password, confirmPass, college, github, linkedIn } =
     formData;
 
   const passInvalid = touched && !passReg.test(password);
@@ -103,7 +103,6 @@ const SignupScreen = () => {
 
   return (
     <>
-      {/* <Meta title='Shopzone | Signup' /> */}
       <Row className='justify-content-md-center'>
         <Col md={6}>
           <div className='display-6'>Sign up</div>
@@ -262,12 +261,12 @@ const SignupScreen = () => {
 
             <FloatingLabel
               className='mb-2'
-              controlId='confPass'
+              controlId='confirmPass'
               label='Confirm password'
             >
               <Form.Control
-                name='confPass'
-                value={confPass}
+                name='confirmPass'
+                value={confirmPass}
                 onChange={changeHandler}
                 type='password'
                 placeholder='Enter your password again'

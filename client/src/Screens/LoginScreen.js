@@ -12,7 +12,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import useInput from "../hooks/use-input";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../redux/action/auth";
-// import Meta from "../components/UI/Meta";
+
 
 const LoginScreen = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -21,7 +21,7 @@ const LoginScreen = () => {
   const navigate = useNavigate();
   const { user, loading, error } = useSelector((state) => state.auth);
 
-  //   console.log(redirect);
+
   const {
     value: enteredEmail,
     isValueValid: isEmailValid,
@@ -58,7 +58,6 @@ const LoginScreen = () => {
 
   return (
     <>
-      {/* <Meta title='Shopzone | Login' /> */}
       <Row className='justify-content-md-center'>
         <Col md={6}>
           <div className='display-6'>Sign in</div>
@@ -137,7 +136,7 @@ const LoginScreen = () => {
             </Col>
           </Row>
         </Col>
-      </Row>{" "}
+      </Row>
     </>
   );
 };
