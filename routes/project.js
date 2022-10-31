@@ -16,4 +16,14 @@ router.route("/").post(protect, createProject).get(getAllProjects);
 
 router.route("/:id").get(getProject).put(updateProject);
 
+router.post(
+  "/logo/imgUrl",
+  wrapAsync(async (req, res, next) => {
+    const { id } = req.params;
+    const { img } = req.body;
+    const name = await Project.findById(id);
+    res.status(200).json(name);
+  })
+);
+
 module.exports = router;
