@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Container,
+  Row,
+  Card,
+  Badge,
+  Spinner,
+} from "react-bootstrap";
 import { colleges } from "../utils/CollgeNameList";
 import { domains } from "../utils/Arrays";
 import { FloatingLabel, Form } from "react-bootstrap";
@@ -9,20 +17,23 @@ import { Link } from "react-router-dom";
 const AllProjects = () => {
   const [projects, setProjects] = useState([]);
   const [filters, setFilters] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchProjects = async () => {
-      const options = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      const { data } = await axios.get("/api/project/allProjects", options);
-      console.log(data);
-      setProjects(data);
+      try {
+        setLoading(true);
+        const { data } = await axios.get("/api/project/allProjects");
+        console.log("fetched");
+        setProjects(data);
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+        setLoading(false);
+      }
     };
     fetchProjects();
-  }, [projects]);
+  }, []);
 
   const handleFilters = (e) => {
     setFilters((prev) => {
@@ -31,18 +42,21 @@ const AllProjects = () => {
   };
 
   const filterProjects = async () => {
-    const options = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
     // console.log(filters);
-    const { data } = await axios.get(
-      `/api/project?college=${filters.college}&domains=${filters.domain}&sort=${filters.sort}`,
-      options
-    );
-    console.log(data);
-    setProjects(data);
+    let qs = "";
+    console.log(filters);
+    try {
+      setLoading(true);
+      const { data } = await axios.get(
+        `/api/project?college=${filters.college}&domains=${filters.domain}&sort=${filters.sort}`
+      );
+      // console.log(data);
+      setLoading(false);
+      setProjects(data);
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+    }
   };
   //   console.log(projects);
   return (
@@ -59,7 +73,7 @@ const AllProjects = () => {
               aria-label='college'
               name='college'
             >
-              <option>Open this select menu</option>
+              <option value=''>Any</option>
               {colleges.map((el, index) => (
                 <option key={index} value={el}>
                   {el}
@@ -79,6 +93,7 @@ const AllProjects = () => {
               aria-label='domain'
               name='domain'
             >
+              <option value=''>Any</option>
               {domains.map((el, index) => (
                 <option key={index} value={el}>
                   {el}
@@ -106,33 +121,36 @@ const AllProjects = () => {
           </select>
         </Col>
       </Row>
-      <Button variant='success' onClick={filterProjects}>
-        Apply
+      <Button
+        variant='success'
+        style={{ width: "110px" }}
+        onClick={filterProjects}
+      >
+        {!loading && "Apply"}
+        {loading && (
+          <div className=''>
+            <Spinner size='sm' animation='grow' variant='primary' />
+
+            <Spinner
+              size='sm'
+              className='mx-1'
+              animation='grow'
+              variant='info'
+            />
+            <Spinner size='sm' animation='grow' variant='warning' />
+          </div>
+        )}
       </Button>
+
       {projects.map((pro) => (
-        <>
-          <Row className="shadow" style={{ height: "40px", margin: "3px" }}>
-            <Link to={`/project/${pro._id}`}>
-              <span>{pro.name}</span>
-            </Link>
-          </Row>
-          <Row
-            className="shadow d-flex"
-            style={{ height: "40px", margin: "3px" }}
-          >
-            <Link to={`/project/${pro._id}`}>
-              <span>{pro.name}</span>
-            </Link>
-          </Row>
-          <Row
-            className="shadow d-flex"
-            style={{ height: "40px", margin: "3px" }}
-          >
-            <Link to={`/project/${pro._id}`}>
-              <span>{pro.name}</span>
-            </Link>
-          </Row>
-        </>
+        <Card key={pro._id} className='shadow my-4 px-2 py-2'>
+          <Card.Header>{pro.name}</Card.Header>
+          <Card.Body>
+            <Badge bg='info'>{pro.isCompleted ? "Completed" : "Ongoing"}</Badge>
+            <div className='my-1'>Domain : {pro.domain}</div>
+            <strong className='my-1'>College : {pro.college}</strong>
+          </Card.Body>
+        </Card>
       ))}
     </Container>
   );

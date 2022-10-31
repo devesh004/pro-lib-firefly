@@ -1,8 +1,7 @@
-const { type } = require("express/lib/response");
 const mongoose = require("mongoose");
-const User = require("./user");
+const User = require("./User");
 
-const ProjectSchema = new mongoose.Schema(
+const ProjectSchema = mongoose.Schema(
   {
     name: {
       type: String,
@@ -74,4 +73,6 @@ const ProjectSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Project", ProjectSchema);
+const Project = mongoose.model("Project", ProjectSchema);
+
+module.exports = Project;
