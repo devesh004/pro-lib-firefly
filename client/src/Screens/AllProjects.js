@@ -24,7 +24,6 @@ const AllProjects = () => {
       try {
         setLoading(true);
         const { data } = await axios.get("/api/project/allProjects");
-        console.log("fetched");
         setProjects(data);
         setLoading(false);
       } catch (err) {
@@ -42,15 +41,12 @@ const AllProjects = () => {
   };
 
   const filterProjects = async () => {
-    // console.log(filters);
     let qs = "";
-    console.log(filters);
     try {
       setLoading(true);
       const { data } = await axios.get(
         `/api/project?college=${filters.college}&domains=${filters.domain}&sort=${filters.sort}`
       );
-      // console.log(data);
       setLoading(false);
       setProjects(data);
     } catch (err) {
@@ -58,7 +54,7 @@ const AllProjects = () => {
       setLoading(false);
     }
   };
-  //   console.log(projects);
+  
   return (
     <Container>
       <Row className='py-3'>
